@@ -9,7 +9,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object WordCount {
     def main(args: Array[String]): Unit = {
         // 创建 Spark 运行配置对象
-        val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("WordCount")
+        val sparkConf: SparkConf = new SparkConf().setAppName("WordCount")
         // 创建 Spark 上下文环境对象(连接对象)
         val sc = new SparkContext(sparkConf)
         // 读取文件数据 hdfs:/// 默认是 当前 NameNode 的地址 <=> hdfs://bigdata101/input
