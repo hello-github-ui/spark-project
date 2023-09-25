@@ -15,6 +15,13 @@
         <encoding>UTF-8</encoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>spring</id>
+            <url>https://maven.aliyun.com/repository/spring</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!--scala依赖-->
         <dependency>
@@ -48,84 +55,52 @@
             <artifactId>log4j-core</artifactId>
             <version>2.19.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.19.0</version>
+        </dependency>
 
 
     </dependencies>
 
     <build>
-        <!-- 自定义打包后的文件名-->
-        <!--<finalName>${artifactId}-1.0</finalName>-->
-
+        <!--指定源码包和测试包的位置-->
         <sourceDirectory>src/main/scala</sourceDirectory>
-        <resources>
-            <resource>
-                <!--指定resource，直接影响读取的properties-->
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
-        <pluginManagement>
-            <plugins>
-                <!-- 编译scala的插件 -->
-                <plugin>
-                    <groupId>net.alchim31.maven</groupId>
-                    <artifactId>scala-maven-plugin</artifactId>
-                    <version>3.2.2</version>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
-
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
+            <!-- 该插件用于将 Scala 代码编译成 class 文件 -->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
-                        <id>scala-compile-first</id>
-                        <phase>process-resources</phase>
+                        <!-- 声明绑定到 maven 的 compile 阶段 -->
                         <goals>
-                            <goal>add-source</goal>
                             <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>scala-test-compile</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
                             <goal>testCompile</goal>
                         </goals>
+                        <configuration>
+                            <args>
+                                <arg>-dependencyfile</arg>
+                                <arg>${project.build.directory}/.scala_depencencies</arg>
+                            </args>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- 打jar插件 -->
+            <!--maven打包的插件-->
+            <!--maven-assembly-plugin 和 maven-shade-plugin都是打包插件。遇到同名文件assembly是覆盖，shade是追加。所以此处选择shade插件-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
-
+                <!--避免生成 dependency-reduced-pom.xml 文件-->
                 <configuration>
-                    <!--自动去除未用到的依赖-->
-                    <minimizeJar>true</minimizeJar>
-                    <!--您可以通过将createDependencyReducedPom设置为false来避免创build它-->
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
-
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -144,11 +119,13 @@
                                 </filter>
                             </filters>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>reference.conf</resource>
                                 </transformer>
-                                <!--指定 main 方法-->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <!--指定main方法-->
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>cn.zxl.spark.master.SparkMaster</mainClass>
                                 </transformer>
                             </transformers>

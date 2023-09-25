@@ -1,4 +1,5 @@
 package com.example.spark.parquet
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import java.io.File
@@ -17,17 +18,30 @@ object OperateFile {
 
         spark.sparkContext.setLogLevel("ERROR")
 
-        try{
+        try {
             // 获取当前项目的路径
-            var filePath: String = new File("").getCanonicalPath
-            filePath = filePath.replaceAll("\\\\", "/")
-            // println(s"""当前项目路径: ${filePath}""")
+            //            var filePath: String = new File("").getCanonicalPath
+            //            filePath = filePath.replaceAll("\\\\", "/")
+            //            // println(s"""当前项目路径: ${filePath}""")
+            //
+            //            val df: DataFrame = spark.read.parquet("file:///" + filePath + "/datas/XHKG_Warrant_Snapshot_Level2_20230901.parquet")
+            //            df.show(10)
 
-            val df: DataFrame = spark.read.parquet("file:///" + filePath + "/datas/XHKG_Warrant_Snapshot_Level2_20230901.parquet")
-            df.show(10)
+            saveParquet(spark)
 
-        }finally {
+        } finally {
             spark.stop()
         }
+    }
+
+
+    /*
+    写入数据到本地的parquet文件中
+     */
+    def saveParquet(spark: SparkSession): Unit = {
+        // 模拟数据
+        val seq: Seq[(String, Any)] = Seq(("name", "zhangsan"), ("age", 21), ("address", "北京市昌平区大前门楼八字胡同2#13"))
+        val rdd: RDD[(String, Any)] = spark.sparkContext.parallelize(seq)
+        rdd.saveAsTextFile("datas/1.parquet")
     }
 }
