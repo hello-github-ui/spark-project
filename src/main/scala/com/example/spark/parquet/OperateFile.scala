@@ -20,7 +20,7 @@ object OperateFile {
                 .master("local[*]")
                 .getOrCreate()
 
-        spark.sparkContext.setLogLevel("ERROR")
+        // spark.sparkContext.setLogLevel("ERROR")
 
         try {
             saveParquet(spark)
