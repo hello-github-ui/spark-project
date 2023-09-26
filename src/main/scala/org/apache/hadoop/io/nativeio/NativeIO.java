@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by 19921224 on 2023/9/26 11:21
- * https://blog.csdn.net/m0_53400772/article/details/130648598
+ * <a href="https://blog.csdn.net/m0_53400772/article/details/130648598">java.lang.UnsatisfiedLinkError报错解决方案</a>
  */
 @Private
 @Unstable
