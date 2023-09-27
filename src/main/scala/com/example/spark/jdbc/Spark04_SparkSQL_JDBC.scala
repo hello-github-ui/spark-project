@@ -6,7 +6,7 @@ import org.apache.spark.sql._
 /**
  * Created by 19921224 on 2023/9/26 17:50
  */
-class Spark04_SparkSQL_JDBC {
+object Spark04_SparkSQL_JDBC {
 
     def main(args: Array[String]): Unit = {
         // TODO 创建 SparkSession 运行环境
@@ -19,24 +19,24 @@ class Spark04_SparkSQL_JDBC {
         // 读取 mysql 数据
         val df: DataFrame = sparkSession.read
                 .format("jdbc")
-                .option("url", "jdbc:mysql://127.0.0.1:3306/vblog")
+                .option("url", "jdbc:mysql://127.0.0.1:3306/shequ-user")
                 .option("driver", "com.mysql.cj.jdbc.Driver")
                 .option("user", "root")
                 .option("password", "123456")
                 .option("dbtable", "user")
                 .load()
 
-        // df.show
+        df.show
 
         // 保存数据
-        df.write
-                .format("jdbc")
-                .option("url", "jdbc:mysql://127.0.0.1:3306/vblog")
-                .option("driver", "com.mysql.cj.jdbc.Driver")
-                .option("user", "root")
-                .option("password", "123456")
-                .option("dbtable", "user_spark")
-                .save()
+                df.write
+                        .format("jdbc")
+                        .option("url", "jdbc:mysql://127.0.0.1:3306/spark_project")
+                        .option("driver", "com.mysql.cj.jdbc.Driver")
+                        .option("user", "root")
+                        .option("password", "123456")
+                        .option("dbtable", "user_spark")
+                        .save()
 
         // TODO 关闭 SparkSession
         sparkSession.close()
