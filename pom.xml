@@ -30,6 +30,13 @@
             <version>2.12.17</version>
         </dependency>
 
+        <!-- spark-streaming -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka-0-10_2.12</artifactId>
+            <version>3.1.2</version>
+        </dependency>
+
 
         <!--spark core-->
         <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core -->
@@ -68,6 +75,25 @@
             <version>8.0.26</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-hive_2.12</artifactId>
+            <version>3.1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-hadoop</artifactId>
+            <version>1.7.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+        </dependency>
 
     </dependencies>
 
